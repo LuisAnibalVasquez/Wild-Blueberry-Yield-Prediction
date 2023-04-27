@@ -1,10 +1,15 @@
 import streamlit as st
 import numpy as np
-import joblib
-
+#import joblib
+import pickle
+from sklearn.linear_model import LinearRegression
 from prediction import get_prediction, scaler
 
-model = joblib.load(r'models/WildBlueberryYieldPrediction.joblib')
+
+
+#model = joblib.load(r'models/WildBlueberryYieldPrediction.joblib')
+model = pickle.load(open('models/WildBlueberryYieldPrediction.pkl', 'rb'))
+
 
 st.set_page_config(page_title="Wild Blueberry Yield Prediction App", page_icon="🍇", layout="wide")
 

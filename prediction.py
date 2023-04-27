@@ -1,6 +1,6 @@
 import joblib
 import numpy as np
-from sklearn.ensemble import RandomForestClassifier
+from sklearn.linear_model import LinearRegression
 from sklearn.preprocessing import StandardScaler
 
 def ordinal_encoder(input_val, feats): 
