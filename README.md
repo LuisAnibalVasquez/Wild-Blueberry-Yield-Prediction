@@ -8,4 +8,4 @@ The target feature is Yield.
 
 The metric used for evaluation is RMSE
 
-You can check the live app
+You can check the [live app](https://lavo-wild-blueberry-yield-prediction.onrender.com//)
