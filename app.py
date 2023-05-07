@@ -3,7 +3,7 @@ import numpy as np
 import pickle
 
 from sklearn.linear_model import LinearRegression
-from prediction import get_prediction, std_scaler
+from prediction import get_prediction, log, std_scaler
 
 model = pickle.load(open('models/WildBlueberryYieldPrediction.pkl', 'rb'))
 
@@ -35,55 +35,49 @@ def main():
             with col5:
                 osmia = st.number_input('osmia bee density: ', min_value = -10.0, max_value = 100.0, value  = 0.0, step =0.01, format = "%f") 
             with col6:
-                MaxOfUpperTRange = st.number_input('Max Of Upper Temp Range: ', min_value = -10.0, max_value = 100.0, value  = 0.0, step =0.01, format = "%f") 
-            with col7:
+                # MaxOfUpperTRange = st.number_input('Max Of Upper Temp Range: ', min_value = -10.0, max_value = 100.0, value  = 0.0, step =0.01, format = "%f") 
                 MinOfUpperTRange = st.number_input('Min Of Upper Temp Range: ', min_value = -10.0, max_value = 100.0, value  = 0.0, step =0.01, format = "%f") 
-            with col8:
+            with col7:
                 AverageOfUpperTRange = st.number_input('Average Of Upper Temp Range: ', min_value = -10.0, max_value = 100.0, value  = 0.0, step =0.01, format = "%f") 
+            with col8:
+                MinOfLowerTRange = st.number_input('Min Of Lower Temp Range: ', min_value = -10.0, max_value = 100.0, value  = 0.0, step =0.01, format = "%f") 
         with st.container():
             col9, col10, col11, col12 = st.columns(4)
             with col9:
-                MaxOfLowerTRange = st.number_input('Max Of Lower Temp Range: ', min_value = -10.0, max_value = 100.0, value  = 0.0, step =0.01, format = "%f") 
-            with col10:
-                MinOfLowerTRange = st.number_input('Min Of Lower Temp Range: ', min_value = -10.0, max_value = 100.0, value  = 0.0, step =0.01, format = "%f") 
-            with col11:
+                # MaxOfLowerTRange = st.number_input('Max Of Lower Temp Range: ', min_value = -10.0, max_value = 100.0, value  = 0.0, step =0.01, format = "%f") 
                 AverageOfLowerTRange = st.number_input('Average Of Lower Temp Range: ', min_value = -10.0, max_value = 100.0, value  = 0.0, step =0.01, format = "%f") 
-            with col12: 
+            with col10:
                 RainingDays = st.number_input('Raining Days: ', min_value = -10.0, max_value = 100.0, value  = 0.0, step =0.01, format = "%f") 
-        with st.container():
-            col13, col14, col15, col16 = st.columns(4)
-            with col13:
+            with col11:
                 AverageRainingDays = st.number_input('Average Raining Days: ', min_value = -10.0, max_value = 100.0, value  = 0.0, step =0.01, format = "%f") 
-            with col14:
+            with col12: 
                 fruitset = st.number_input('Fruit Set: ', min_value = -10.0, max_value = 100.0, value  = 0.0, step =0.01, format = "%f") 
-            with col15:
+        with st.container():
+            col13, col14 = st.columns(2)
+            with col13:
                 fruitmass  = st.number_input('Fruit Mass: ', min_value = -10.0, max_value = 100.0, value  = 0.0, step =0.01, format = "%f") 
-            with col16:
+            with col14:
                 seeds = st.number_input('Seeds: ', min_value = -10.0, max_value = 100.0, value  = 0.0, step =0.01, format = "%f") 
-        
+
+
         submit = st.form_submit_button("Predict")
 
-
         if submit:   
-           
-            data = np.array([std_scaler(clonesize, 'clonesize'), 
-                             std_scaler(honeybee, 'honeybee'), 
-                             std_scaler(bumbles, 'bumbles'),
-                             std_scaler(andrena, 'andrena'), 
-                             std_scaler(osmia, 'osmia'), 
-                             std_scaler(MaxOfUpperTRange, 'MaxOfUpperTRange'),
-                             std_scaler(MinOfUpperTRange, 'MinOfUpperTRange'), 
-                             std_scaler(AverageOfUpperTRange, 'AverageOfUpperTRange'),
-                             std_scaler(MaxOfLowerTRange, 'MaxOfLowerTRange'), 
-                             std_scaler(MinOfLowerTRange, 'MinOfLowerTRange'), 
-                             std_scaler(AverageOfLowerTRange,'AverageOfLowerTRange'), 
-                             std_scaler(RainingDays, 'RainingDays'), 
-                             std_scaler(AverageRainingDays, 'AverageRainingDays'), 
-                             std_scaler(fruitset,'fruitset'), 
-                             std_scaler(fruitmass,'fruitmass'), 
-                             std_scaler(seeds, 'seeds')
+            data = np.array([clonesize,	
+                            log(honeybee + 1),	
+                            bumbles,
+                            andrena,
+                            osmia,
+                            MinOfUpperTRange,
+                            AverageOfUpperTRange,
+                            MinOfLowerTRange,
+                            AverageOfLowerTRange,
+                            RainingDays,
+                            AverageRainingDays,
+                            fruitset,
+                            fruitmass,
+                            seeds
                              ]).reshape(1,-1)
-
             pred = get_prediction(data=data , model=model)
             st.subheader(f"The predicted Yield is:  {pred[0]}")
 

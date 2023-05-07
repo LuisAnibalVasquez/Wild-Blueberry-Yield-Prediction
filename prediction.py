@@ -1,8 +1,4 @@
-import joblib
 import numpy as np
-from sklearn.linear_model import LinearRegression
-from sklearn.preprocessing import StandardScaler
-
 import pandas as pd
 
 def ordinal_encoder(input_val, feats): 
@@ -18,6 +14,8 @@ def std_scaler(value, label):
     res = ( (value - np.mean(colum)) / np.std(colum)  )
     return res
 
+def log(value):
+    return np.log(value)
 
 def get_prediction(data, model):
     return model.predict(data)
